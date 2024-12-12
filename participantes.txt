@@ -1,0 +1,2 @@
+diogo@diogo.com|galera do vava|diogo|sydney@sydney.com|100.0
+sydney@sydney.com|galera do vava|sydney|sydney@sydney.com|100.0

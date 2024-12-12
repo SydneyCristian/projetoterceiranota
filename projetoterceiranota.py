@@ -1,61 +1,53 @@
-from usuarios import *
-from eventos import *
+import time
 
-while True:
-    print('+-----------------------------------------------------------------------------+')
-    print('+                                 Eventos                                     +')
-    print('+                            Mentes Criativas                                 +')
-    print('+-----------------------------------------------------------------------------+')
-    print('+               [1] - Cadastar novo Usuário                                   +')
-    print('+               [2] - Login do Usuário                                        +')
-    print('+               [0] - Sair                                                    +')
-    print('+-----------------------------------------------------------------------------+')
-    opcao = input('Digite uma opção acima: ')
-
-    if opcao == '1':
-        novo_usuario(usuarios)
-    elif opcao == '0':
-        break
-    elif opcao == '2':
-        login = login_usuario(usuarios)
+from usuario import *
+from evento import *
+from participante import *
 
 
-        while True:
-            print('+-----------------------------------------------------------------------------+')
-            print(f'                            Bem-vindo(a)!                                     ')
-            print('+-----------------------------------------------------------------------------+')
-            print('+                                  Eventos                                    +')
-            print('+                              Mentes Criativas                               +')
-            print('+-----------------------------------------------------------------------------+')
-            print('+               [1] - Cadastrar Evento                                        +')
-            print('+               [2] - Buscar Evento                                           +')
-            print('+               [3] - Listar os eventos                                       +')
-            print('+               [4] - Remover eventos                                         +')
-            print('+               [5] - Participar de Evento                                    +')
-            print('+               [6] - Listar Participantes do evento                          +')
-            print('+               [7] - Mostrar valor arrecadado                                +')
-            print('+               [8] - Avalie nosso evento                                     +')
-            print('+               [9] - Deslogar                                                +')
-            print('+-----------------------------------------------------------------------------+')
-            opcao = input('Digite uma opção acima: ')
-            if opcao == '1':
-                cadastrar_evento(eventos)
-            elif opcao == '2':
-                evento_especifico(eventos)
-            elif opcao == '3':
-                eventos_totais(eventos)
-            elif opcao == '4':
-                excluir_evento(eventos)
-            elif opcao == '5':
-                participar_evento(eventos)
-            elif opcao == '6':
-                listar_participantes(eventos)
-            elif opcao == '7':
-                valor_arrecadado(eventos)
-            elif opcao == '8':
-                avaliar_evento(eventos)
-            elif opcao == '9':
-                logout_usuario(logado)
+def projeto():
+    usuarios = {}
+    eventos = {}
+    participantes = []
+    participantes = carregar_participantes(arquivo='participantes.txt')
+    usuario_logado = False
+
+    while True:
+        if not usuario_logado:
+            opcao = menu_usuario()
+            if opcao == '0':
+                print('Saindo...')
+                time.sleep(3)
                 break
-    else:
-        print('Valor inválido. Tente novamente.')
+            if opcao == '1':
+                cadastrar_usuario(usuarios)
+            if opcao == '2':
+                usuario_logado = entrar(usuarios)
+        else:
+            opcao = menu_evento(usuario_logado)
+            if opcao == '0':
+                print('Deslogando...')
+                time.sleep(3)
+                usuario_logado = False
+            if opcao == '1':
+                cadastrar_evento(eventos, usuario_logado)
+            if opcao == '2':
+                buscar_evento(eventos, usuario_logado)
+            if opcao == '3':
+                listar_eventos(eventos, usuario_logado)
+            if opcao == '4':
+                remover_evento(eventos, usuario_logado)
+            if opcao == '5':
+                participar_evento(eventos, usuario_logado, participantes)
+                salvar_participantes(participantes)
+            if opcao == '6':
+                listar_participantes(participantes, eventos)
+            if opcao == '7':
+                valor_arrecadado(eventos, participantes, usuario_logado)
+            if opcao == '8':
+                avaliar_evento(eventos, usuario_logado, participantes)
+            if opcao == '9':
+                mostrar_tempo_evento(eventos)
+
+
+projeto()
